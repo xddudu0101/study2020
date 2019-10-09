@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>1.浅拷贝：可以使用Object.assign() 将原对象或原数组的引用直接赋给新对象，新数组，新对象／数组只是原对象的一个引用</div>
+  <div>2.深拷贝： JSON.parse(JSON.stringify(object)) 。创建一个新的对象和数组，将原对象的各项属性的“值”（数组的所有元素）拷贝过来，是“值”而不是“引用”。</div>
+  <div>为什么要使用深拷贝？ 我们希望在改变新的数组（对象）的时候，不改变原数组（对象）
+  </div>
+  <script>
+    // 深拷贝数组（只拷贝第一级数组元素）　
+    // 1.直接遍历
+    var array = [1, 2, 3, 4]
+    function copy(array) {
+      let newArray = []
+      for (let item of array) {
+        newArray.push(item)
+      }
+      return newArray;
+    }
+    var copyArray = copy(array)
+    copyArray[0] = 100
+    console.log('1.array', array); // [1, 2, 3, 4]
+    console.log('1.copyArray', copyArray); // [100, 2, 3, 4]
+  </script>
+  <script>
+    // 2. slice()
+    var array = [1, 2, 3, 4]
+    var copyArray = array.slice()
+    copyArray[0] = 100;
+    console.log(array); // [1, 2, 3, 4]
+    console.log(copyArray); // [100, 2, 3, 4]
+    // slice() 方法返回一个从已有的数组中截取一部分元素片段组成的新数组（不改变原来的数组！）
+    // 用法：array．slice(start,end)　start表示是起始元素的下标，　end表示的是终止元素的下标
+    // 当slice()不带任何参数的时候，默认返回一个长度和原数组相同的新数组
+  </script>
+  <script>
+    // 3. concat()
+    var array = [1, 2, 3, 4];
+    var copyArray = array.concat();
+    copyArray[0] = 100;
+    console.log(array); // [1, 2, 3, 4]
+    console.log(copyArray); // [100, 2, 3, 4]
+    // concat() 方法用于连接两个或多个数组。( 该方法不会改变现有的数组，而仅仅会返回被连接数组的一个副本。)
+    // 用法：array.concat(array1,array2,......,arrayN)
+  </script>
+  <div>
+    总结：简单数组, 上面这三种拷贝方式都能成功，但对第一级数组元素是对象或者数组等引用类型变量的数组，上面的三种方式都将失效，
+  </div>
+  <div>
+    拷贝所有层级：
+    <br /> 1.不仅拷贝第一层级，还能够拷贝数组或对象所有层级的各项值
+    <br /> 2. 不是单独针对数组或对象，而是能够通用于数组，对象和其他复杂的JSON形式的对象
+    <br /> 下面这一招可谓是“一招鲜，吃遍天”
+  </div>
+  <script>
+    var array = [
+      { number: 1 },
+      { number: 2 },
+      { number: 3 }
+    ];
+    var copyArray = JSON.parse(JSON.stringify(array))
+    copyArray[0].number = 100;
+    console.log(array); //  [{number: 1}, { number: 2 }, { number: 3 }]
+    console.log(copyArray); // [{number: 100}, { number: 2 }, { number: 3 }]
+  </script>
+  <div>能用大招杀的就不要用q杀嘛！！</div>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  1、虽然setTimeout延时为0,这个函数第二个参数不得小于4毫秒，不足会自动增加。
+  <script>
+    console.log('script start')
+    setTimeout(function () {
+      console.log('settimeout')
+    }, 0)
+    console.log('script end')
+  </script>
+  <br>2、js任务源可以分为微任务（microtask,jobs）和宏任务（macrotask,task）。
+  <br>很多人有个误区，认为微任务快于宏任务，其实是错误的。因为宏任务中包括了script，浏览器会先执行一个宏任务，接下来有异步代码的话就先执行微任务
+  <br>微任务包括 process.nextTick ，promise ，Object.observe，MutationObserver
+  <br>宏任务包括 script ， setTimeout ，setInterval，setImmediate ，I/O ，UI renderin
+  <script>
+
+  </script>
+
+  <br>3、所以正确的一次 Event loop 顺序是这样的
+  <br>(3-1)执行同步代码，这属于宏任务
+  <br>(3-2)执行栈为空，查询是否有微任务需要执行
+  <br>(3-3)执行所有微任务
+  <br>(3-4)必要的话渲染 UI
+  <br>(3-5)然后开始下一轮 Event loop，执行宏任务中的异步代码
+  <br>(3-6)通过上述的Event loop顺序可知，如果宏任务中的异步代码有大量的计算并且需要操作DOM的话，为了更快的界面响应，我们可以把操作 DOM 放入微任务中
+  <script>
+    console.log('script start');
+    setTimeout(function () {
+      console.log('setTimeout');
+    }, 0);
+    new Promise((resolve) => {
+      console.log('Promise')
+      resolve()
+    }).then(function () {
+      console.log('promise1');
+    }).then(function () {
+      console.log('promise2');
+    });
+    console.log('script end');
+// script start => Promise => script end => promise1 => promise2 => setTimeout
+
+  </script>
+
+</body>
+
+</html>

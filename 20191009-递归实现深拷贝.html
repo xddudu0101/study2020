@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <br> 第1种方法：“一招鲜，吃遍天” JSON.parse(JSON.stringify(XXXX))
+    <br> 你说上面的那种方法太无脑, 一定要自己写一段递归才有做技术的感觉？
+    <br> 第2种方法：递归实现
+  </div>
+  <script>
+    var array = [
+      { number: 1 },
+      { number: 2 },
+      { number: 3 }
+    ]
+    function copy(obj) {
+      var newobj = obj.constructor === Array ? [] : {}
+      if (typeof obj !== 'object') {
+        return
+      }
+      for (var i in obj) {
+        newobj[i] = typeof obj[i] === 'object' ?
+          copy(obj[i]) : obj[i];
+      }
+      return newobj
+    }
+    var copyArray = copy(array)
+    copyArray[0].number = 100;
+    console.log(array); //  [{number: 1}, { number: 2 }, { number: 3 }]
+    console.log(copyArray); // [{number: 100}, { number: 2 }, { number: 3 }]
+  </script>
+  <br>第3种方法：存在大量深拷贝需求的代码——immutable提供的解决方案
+  <br>（我们可能只是希望改变新数组里的其中一个元素的时候不影响原数组，但却被迫要把整个原数组都拷贝一遍，这不是一种浪费吗？）所以，当你的项目里有大量深拷贝需求的时候，性能就可能形成了一个制约的瓶颈了。
+  <br>immutable的作用： 通过immutable引入的一套API，实现： 1.在改变新的数组（对象）的时候，不改变原数组（对象） 2.在大量深拷贝操作中显著地减少性能消耗
+  <script>
+    const { Map } = require('immutable')
+    const map1 = Map({ a: 1, b: 2, c: 3 })
+    const map2 = map1.set('b', 50)
+    map1.get('b') // 2
+    map2.get('b') // 50
+  </script>
+</body>
+
+</html>

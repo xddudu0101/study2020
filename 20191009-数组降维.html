@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <br>1、二维数据可直接用API
+  <script>
+    [1, [2], 3].flatMap(v => v)
+    // -> [1, 2, 3]
+  </script>
+  <br>2、N维数据彻底的降维
+  <script>
+    const flattenDeep = (arr) => Array.isArray(arr) ? arr.reduce((a, b) => [...a, ...flattenDeep(b)], []) : [arr]
+    flattenDeep([1, [[2], [3, [4]], 5]])
+  </script>
+</body>
+
+</html>
